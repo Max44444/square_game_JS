@@ -1,25 +1,21 @@
-var $start        = document.querySelector('#start');
-var $game         = document.querySelector('#game');
-var $time         = document.querySelector('#time');
-var $result       = document.querySelector('#result');
-var $timeHeader   = document.querySelector('#time-header');
-var $resultHeader = document.querySelector('#result-header');
-var $gameTime     = document.querySelector('#game-time');
+const $start        = document.querySelector('#start');
+const $game         = document.querySelector('#game');
+const $time         = document.querySelector('#time');
+const $result       = document.querySelector('#result');
+const $timeHeader   = document.querySelector('#time-header');
+const $resultHeader = document.querySelector('#result-header');
+const $gameTime     = document.querySelector('#game-time');
 
-var score = 0;
-var isGameStarted = false;
+let score = 0;
+let isGameStarted = false;
 
 $start.addEventListener('click', startGame);
 $game.addEventListener('click', handleBoxClick);
 $gameTime.addEventListener('input', setGameTime);
 
-function show($el) {
-  $el.classList.remove('hide');
-}
+const show = ($el) => $el.classList.remove('hide');
 
-function hide($el) {
-  $el.classList.add('hide');
-}
+const hide = ($el) => $el.classList.add('hide');
 
 function startGame() {
   score = 0;
@@ -29,8 +25,8 @@ function startGame() {
   $game.style.backgroundColor = '#fff';
   hide($start);
 
-  var interval = setInterval(function() {
-    var time = parseFloat($time.textContent)
+  const interval = setInterval(() => {
+    const time = parseFloat($time.textContent)
 
     if (time <= 0) {
       clearInterval(interval);
@@ -48,7 +44,7 @@ function setGameScore() {
 }
 
 function setGameTime() {
-  var time = +$gameTime.value;
+  const time = +$gameTime.value;
   $time.textContent = time.toFixed(1);
   show($timeHeader);
   hide($resultHeader);
@@ -72,26 +68,23 @@ function handleBoxClick(event) {
   }
 }
 
-function renderBox() {
-  
-  $game.innerHTML = ''
-  var box = document.createElement('div');
-  var boxSize = getRandom(30, 100);
-  var gameSize = $game.getBoundingClientRect();
-  var maxTop = gameSize.height - boxSize;
-  var maxLeft = gameSize.width - boxSize
+const getRandom = (min, max) =>  Math.floor(Math.random() * (max - min) + min);
 
-  box.style.height = box.style.width = boxSize + 'px';
+function renderBox() {
+  $game.innerHTML = ''
+  const box = document.createElement('div');
+  const boxSize = getRandom(30, 100);
+  const gameSize = $game.getBoundingClientRect();
+  const maxTop = gameSize.height - boxSize;
+  const maxLeft = gameSize.width - boxSize
+
+  box.style.height = box.style.width = `${boxSize}px`;
   box.style.position = 'absolute';
-  box.style.backgroundColor = `#${getRandom(0xccc, 0xffffff).toString(16).padStart(6, '0')}`;
-  box.style.top = getRandom(0, maxTop) + 'px';
-  box.style.left = getRandom(0, maxLeft) +'px';
+  box.style.backgroundColor = `#${getRandom(0xfff, 0xffffff).toString(16).padStart(6, '0')}`;
+  box.style.top = `${getRandom(0, maxTop)}px`;
+  box.style.left = `${getRandom(0, maxLeft)}px`;
   box.style.cursor = 'pointer';
   box.setAttribute('data-box', 'true');
 
   $game.insertAdjacentElement('afterbegin', box);
-}
-
-function getRandom(min, max) {
-  return Math.floor(Math.random() * (max - min) + min);
 }
